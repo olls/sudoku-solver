@@ -7,8 +7,8 @@ class Puzzle(object):
         #                    Number,    (y pos, xpos)
         puzzle = [Cell(puzzle[i], (int(i/9), i%9)) for i in range(81)]
         # Split puzzle into rows.
-        self.puzzle = [puzzle[:9], puzzle[9:18], puzzle[18:27], 
-                       puzzle[27:36], puzzle[36:45], puzzle[45:54], 
+        self.puzzle = [puzzle[:9], puzzle[9:18], puzzle[18:27],
+                       puzzle[27:36], puzzle[36:45], puzzle[45:54],
                        puzzle[54:63], puzzle[63:72], puzzle[72:81]]
 
         self.lastframe = None
@@ -36,7 +36,7 @@ class Puzzle(object):
         return solved
 
     def stuck(self):
-        """ 
+        """
             Returns True if the lastframe is the same as the current puzzle.
         """
         same = True
@@ -127,7 +127,7 @@ class Cell(object):
                     # Check all of our candidates against the cell.
                     for candidate in self.candidates:
                         if cell.val == candidate:
-                            # If cell conflicts with one of our candidates, 
+                            # If cell conflicts with one of our candidates,
                             #   remove candidate.
                             self.candidates.remove(candidate)
 
@@ -136,13 +136,13 @@ class Cell(object):
         if self.solved:
             self.num = self.candidates[0]
 
-        # If only cell in row or column or box with a particular candidate, 
+        # If only cell in row or column or box with a particular candidate,
         #   set us solved.
         # Hidden Candidate
 
         # Check row, column, box for other cells with our candidates.
         for candidate in self.candidates:
-            # 'only' gets set to false if any other cells in row, column, 
+            # 'only' gets set to false if any other cells in row, column,
             #   box contain this candidate.
 
             only = True
