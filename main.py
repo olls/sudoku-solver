@@ -24,21 +24,27 @@ class Puzzle(QtGui.QWidget):
     def __init__(self, puzzle):
         super(Puzzle, self).__init__()
 
-        self.puzzle = puzzle
+        self.solver = solver.Puzzle(puzzle)
         self.initUI()
 
     def initUI(self):
         self.grid = QtGui.QGridLayout()
+        self.grid.setHorizontalSpacing(15)
+        self.grid.setVerticalSpacing(0)
 
         solveBtn = QtGui.QPushButton('Solve')
+        solveBtn.clicked.connect(self.solve)
         self.grid.addWidget(solveBtn, 12, 0, 1, 11)
 
-        for i, cell in enumerate(self.puzzle):
-            self.grid.addWidget(
-                Cell(cell),
-                int(i / 9) + int(((i / 9) / 9) * 3),
-                int(i % 9) + int(((i % 9) / 9) * 3)
-            )
+        self.cells = []
+        for y, row in enumerate(self.solver.puzzle):
+            for x, cell in enumerate(row):
+                self.cells.append(Cell(cell.val))
+                self.grid.addWidget(
+                    self.cells[-1],
+                    y + int((y / 9) * 3),
+                    x + int((x / 9) * 3)
+                )
 
         for pos in range(11):
             char = '┼' if pos == 3 or pos == 7 else '│─'
@@ -49,6 +55,18 @@ class Puzzle(QtGui.QWidget):
 
         self.setLayout(self.grid)
         self.show()
+
+    def solve(self):
+        stuck = False
+        while not self.solver.solved and not stuck:
+            stuck = self.solver.frame()
+            cells = [item for sublist in self.solver.puzzle for item in sublist]
+            for i, guiCell in enumerate(self.cells):
+                guiCell.value = cells[i].val
+        if stuck:
+            msg = QtGui.QMessageBox()
+            msg.setText('Cannot solve puzzle.')
+            msg.exec_()
 
 class Cell(QtGui.QLabel):
     def __init__(self, startValue):
@@ -62,7 +80,7 @@ class Cell(QtGui.QLabel):
 
     @value.setter
     def value(self, value):
-        if int(value) == 0:
+        if not int(value):
             self._value = None
             self.setText('')
         else:
