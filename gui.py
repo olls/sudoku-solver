@@ -16,7 +16,7 @@ class MainWindow(QtGui.QMainWindow):
 
     def initUI(self):
         self.setCentralWidget(self.puzzle)
-
+        self.setWindowTitle('Sudoku Solver')
         self.show()
 
 
@@ -89,7 +89,7 @@ class Cell(QtGui.QLabel):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QtGui.QApplication(['Sudoku Solver'])
     ex = MainWindow()
     sys.exit(app.exec_())
 
