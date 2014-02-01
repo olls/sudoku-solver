@@ -187,7 +187,7 @@ class Cell(object):
 
 
 def randPuzzle():
-    """ From http://kjell.haxx.se/sudoku """
+    """ From http://magictour.free.fr/msk_009 """
 
     puzzles = [
         '000508060000700010000021970060000002009147800500000090014370000070002000020805000', # Mild s
