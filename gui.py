@@ -15,6 +15,8 @@ class MainWindow(QtGui.QWidget):
         self.puzzle = Puzzle(puzzle)
         self.initUI()
 
+        self.puzzleIn.setText(puzzle)
+
     def initUI(self):
         vbox = QtGui.QVBoxLayout()
 
