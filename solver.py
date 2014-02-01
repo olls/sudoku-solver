@@ -6,6 +6,9 @@ import random
 
 class Puzzle(object):
     def __init__(self, puzzle):
+
+        puzzle = ''.join(['0' if i == '.' else i for i in puzzle])
+
         #                    Number,    (y pos, xpos)
         puzzle = [Cell(puzzle[i], (int(i / 9), i % 9)) for i in range(81)]
         # Split puzzle into rows.
