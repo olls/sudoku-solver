@@ -39,6 +39,7 @@ class MainWindow(QtGui.QWidget):
 
         self.setLayout(vbox)
         self.setWindowTitle('Sudoku Solver')
+        self.setFixedSize(self.sizeHint())
         self.show()
 
     def reset(self):
