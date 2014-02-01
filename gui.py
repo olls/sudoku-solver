@@ -1,4 +1,5 @@
 import sys
+import copy
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
@@ -6,7 +7,7 @@ from PyQt4 import QtCore
 import solver
 
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtGui.QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
 
@@ -15,15 +16,40 @@ class MainWindow(QtGui.QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.setCentralWidget(self.puzzle)
+        vbox = QtGui.QVBoxLayout()
+
+        hbox = QtGui.QHBoxLayout()
+        self.puzzleIn = QtGui.QLineEdit()
+        hbox.addWidget(self.puzzleIn)
+        loadBtn = QtGui.QPushButton('Load')
+
+        loadBtn.clicked.connect(self.reset)
+        hbox.addWidget(loadBtn)
+        vbox.addLayout(hbox)
+
+        hbox = QtGui.QHBoxLayout()
+        hbox.addWidget(self.puzzle)
+        vbox.addLayout(hbox)
+
+        hbox = QtGui.QHBoxLayout()
+        solveBtn = QtGui.QPushButton('Solve')
+        solveBtn.clicked.connect(self.puzzle.solve)
+        hbox.addWidget(solveBtn)
+        vbox.addLayout(hbox)
+
+        self.setLayout(vbox)
         self.setWindowTitle('Sudoku Solver')
         self.show()
+
+    def reset(self):
+        self.puzzle.reset(self.puzzleIn.text())
 
 
 class Puzzle(QtGui.QWidget):
     def __init__(self, puzzle):
         super(Puzzle, self).__init__()
 
+        self.start = copy.deepcopy(puzzle)
         self.solver = solver.Puzzle(puzzle)
         self.initUI()
 
@@ -32,9 +58,13 @@ class Puzzle(QtGui.QWidget):
         self.grid.setHorizontalSpacing(15)
         self.grid.setVerticalSpacing(0)
 
-        solveBtn = QtGui.QPushButton('Solve')
-        solveBtn.clicked.connect(self.solve)
-        self.grid.addWidget(solveBtn, 12, 0, 1, 11)
+        self.display()
+
+        self.setLayout(self.grid)
+        self.show()
+
+    def display(self):
+        for i in range(self.grid.count()): self.grid.itemAt(i).widget().close()
 
         self.cells = []
         for y, row in enumerate(self.solver.puzzle):
@@ -53,9 +83,6 @@ class Puzzle(QtGui.QWidget):
             self.grid.addWidget(QtGui.QLabel(char[-1]), 3, pos)
             self.grid.addWidget(QtGui.QLabel(char[-1]), 7, pos)
 
-        self.setLayout(self.grid)
-        self.show()
-
     def solve(self):
         stuck = False
         while not self.solver.solved and not stuck:
@@ -67,6 +94,13 @@ class Puzzle(QtGui.QWidget):
             msg = QtGui.QMessageBox()
             msg.setText('Cannot solve puzzle.')
             msg.exec_()
+
+    def reset(self, puzzle=None):
+        if not puzzle is None:
+            self.start = puzzle
+        self.solver = solver.Puzzle(copy.deepcopy(self.start))
+        self.display()
+
 
 class Cell(QtGui.QLabel):
     def __init__(self, startValue):
