@@ -88,10 +88,10 @@ class Puzzle(QtGui.QWidget):
 
         pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
         qp.setPen(pen)
-        qp.drawLine(87, 0, 87, 300)
-        qp.drawLine(183, 0, 183, 300)
-        qp.drawLine(0, 85, 300, 85)
-        qp.drawLine(0, 170, 300, 170)
+        qp.drawLine((self.width() / 3),     0, (self.width() / 3),      self.height())
+        qp.drawLine((self.width() / 3) * 2, 0, (self.width() / 3) * 2,  self.height())
+        qp.drawLine(0,  (self.height() / 3),        self.width(), (self.height() / 3))
+        qp.drawLine(0,  (self.height() / 3) * 2,    self.width(), (self.height() / 3) * 2)
 
         qp.end()
 
