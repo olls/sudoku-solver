@@ -44,7 +44,7 @@ class MainWindow(QtGui.QWidget):
         self.show()
 
     def reset(self):
-        self.puzzle.reset(self.puzzleIn.text())
+        self.puzzle.reset(str(self.puzzleIn.text()))
 
 
 class Puzzle(QtGui.QWidget):
@@ -68,8 +68,8 @@ class Puzzle(QtGui.QWidget):
                 self.cells.append(Cell(cell.val))
                 self.grid.addWidget(
                     self.cells[-1],
-                    y + int((y / 9) * 3),
-                    x + int((x / 9) * 3)
+                    y + int((float(y) / 9) * 3),
+                    x + int((float(x) / 9) * 3)
                 )
 
         # Add blank labels to make spaces between boxes.
