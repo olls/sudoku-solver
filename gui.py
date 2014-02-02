@@ -1,5 +1,4 @@
 import sys
-import copy
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
@@ -52,7 +51,7 @@ class Puzzle(QtGui.QWidget):
     def __init__(self, puzzle):
         super(Puzzle, self).__init__()
 
-        self.start = copy.deepcopy(puzzle)
+        self.start = puzzle
         self.solver = solver.Puzzle(puzzle)
         self.initUI()
 
@@ -61,12 +60,6 @@ class Puzzle(QtGui.QWidget):
         self.grid.setHorizontalSpacing(15)
         self.grid.setVerticalSpacing(0)
 
-        self.display()
-
-        self.setLayout(self.grid)
-        self.show()
-
-    def display(self):
         for i in range(self.grid.count()): self.grid.itemAt(i).widget().close()
 
         self.cells = []
@@ -79,36 +72,62 @@ class Puzzle(QtGui.QWidget):
                     x + int((x / 9) * 3)
                 )
 
+        # Add blank labels to make spaces between boxes.
         for pos in range(11):
-            char = '┼' if pos == 3 or pos == 7 else '│─'
-            self.grid.addWidget(QtGui.QLabel(char[0]), pos, 3)
-            self.grid.addWidget(QtGui.QLabel(char[0]), pos, 7)
-            self.grid.addWidget(QtGui.QLabel(char[-1]), 3, pos)
-            self.grid.addWidget(QtGui.QLabel(char[-1]), 7, pos)
+            self.grid.addWidget(QtGui.QLabel(' '), pos, 3)
+            self.grid.addWidget(QtGui.QLabel(' '), pos, 7)
+            self.grid.addWidget(QtGui.QLabel(' '), 3, pos)
+            self.grid.addWidget(QtGui.QLabel(' '), 7, pos)
+
+        self.setLayout(self.grid)
+        self.show()
+
+    def paintEvent(self, event):
+        qp = QtGui.QPainter()
+        qp.begin(self)
+
+        pen = QtGui.QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine)
+        qp.setPen(pen)
+        qp.drawLine(87, 0, 87, 300)
+        qp.drawLine(183, 0, 183, 300)
+        qp.drawLine(0, 85, 300, 85)
+        qp.drawLine(0, 170, 300, 170)
+
+        qp.end()
 
     def solve(self):
         stuck = False
         while not self.solver.solved and not stuck:
             stuck = self.solver.frame()
-            cells = [item for sublist in self.solver.puzzle for item in sublist]
-            for i, guiCell in enumerate(self.cells):
-                guiCell.value = cells[i].val
+
+            self.update()
+
         if stuck:
             msg = QtGui.QMessageBox()
             msg.setText('Cannot solve puzzle.')
             msg.exec_()
 
-    def reset(self, puzzle=None):
-        if not puzzle is None:
-            self.start = puzzle
-        self.solver = solver.Puzzle(copy.deepcopy(self.start))
-        self.display()
+    def update(self, new=False):
+        # Flatten list
+        cells = [item for sublist in self.solver.puzzle for item in sublist]
 
+        for i, guiCell in enumerate(self.cells):
+            if new:
+                guiCell.set = bool(cells[i].val)
+            guiCell.value = cells[i].val
+
+    def reset(self, puzzle=None):
+        if puzzle:
+            self.start = puzzle
+
+        self.solver = solver.Puzzle(self.start)
+        self.update(new=True)
 
 class Cell(QtGui.QLabel):
     def __init__(self, startValue):
         super(Cell, self).__init__('')
 
+        self.set = bool(startValue)
         self.value = startValue
 
     @property
@@ -122,7 +141,10 @@ class Cell(QtGui.QLabel):
             self.setText('')
         else:
             self._value = int(value)
-            self.setNum(self.value)
+            if self.set:
+                self.setText('<b>' + str(self.value) + '</b>')
+            else:
+                self.setText(str(self.value))
 
 
 def main():
