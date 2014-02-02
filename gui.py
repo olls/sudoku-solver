@@ -23,9 +23,14 @@ class MainWindow(QtGui.QWidget):
         self.puzzleIn = QtGui.QLineEdit()
         hbox.addWidget(self.puzzleIn)
         loadBtn = QtGui.QPushButton('Load')
-
         loadBtn.clicked.connect(self.reset)
         hbox.addWidget(loadBtn)
+        vbox.addLayout(hbox)
+
+        hbox = QtGui.QHBoxLayout()
+        randBtn = QtGui.QPushButton('Random')
+        randBtn.clicked.connect(lambda: self.reset(rand=True))
+        hbox.addWidget(randBtn)
         vbox.addLayout(hbox)
 
         hbox = QtGui.QHBoxLayout()
@@ -43,7 +48,10 @@ class MainWindow(QtGui.QWidget):
         self.setFixedSize(self.sizeHint())
         self.show()
 
-    def reset(self):
+    def reset(self, rand=False):
+        if rand:
+            self.puzzleIn.setText(solver.randPuzzle())
+
         self.puzzle.reset(str(self.puzzleIn.text()))
 
 
@@ -103,9 +111,7 @@ class Puzzle(QtGui.QWidget):
             self.update()
 
         if stuck:
-            msg = QtGui.QMessageBox()
-            msg.setText('Cannot solve puzzle.')
-            msg.exec_()
+            QtGui.QMessageBox.about(self, 'Error', 'Cannot solve puzzle.')
 
     def update(self, new=False):
         # Flatten list
