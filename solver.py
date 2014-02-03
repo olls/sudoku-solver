@@ -16,7 +16,8 @@ class Puzzle(object):
                        puzzle[27:36], puzzle[36:45], puzzle[45:54],
                        puzzle[54:63], puzzle[63:72], puzzle[72:81]]
 
-        self.lastframe = None
+        self.framesBeforeStuck = 10
+        self.frames = [None for i in range(self.framesBeforeStuck)]
 
     def __str__(self):
         out = '\n'
@@ -42,19 +43,22 @@ class Puzzle(object):
 
     def stuck(self):
         """
-            Returns True if the lastframe is the same as the current puzzle.
+            Returns True if the 4nd last frame is the same as the current puzzle.
         """
         same = True
         for y in range(len(self.puzzle)):
             for x in range(len(self.puzzle[y])):
-                if not self.puzzle[y][x].val == self.lastframe[y][x].val:
+                if self.frames[-self.framesBeforeStuck]:
+                    if not self.puzzle[y][x].val == self.frames[-self.framesBeforeStuck][y][x].val:
+                        same = False
+                else:
                     same = False
         return same
 
     def frame(self):
         """ Does a pass on the puzzle removing conflicts for each cell """
 
-        self.lastframe = copy.deepcopy(self.puzzle)
+        self.frames.append(copy.deepcopy(self.puzzle))
 
         for y, row in enumerate(self.puzzle):
             for x, cell in enumerate(row):
@@ -189,7 +193,7 @@ class Cell(object):
 def randPuzzle():
     """ From http://magictour.free.fr/msk_009 """
 
-    with open('puzzles.sdm') as afile:
+    with open('puzzles2.sdm') as afile:
         line = next(afile)
         for num, aline in enumerate(afile):
             if random.randrange(num + 2): continue
@@ -259,6 +263,21 @@ def main():
     else:
         print('Finished in ' + str(round((end - start), 5)) + 's.')
         return end - start
+
+def test():
+    times = []
+    for i in range(17445):
+        p = randPuzzle()
+        print('{}: {}'.format(i, p))
+        puzzle = Puzzle(p)
+        stuck = False
+        start = time.time()
+        while not puzzle.solved and not stuck:
+            stuck = puzzle.frame()
+        if not stuck:
+            times.append(time.time() - start)
+    print('Solved: {} / 17,445'.format(len(times)))
+    print('Average Time: {}'.format(sum(times) / len(times)))
 
 if __name__ == '__main__':
     main()
