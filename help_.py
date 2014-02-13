@@ -41,7 +41,7 @@ class Win(QtGui.QMainWindow):
         view.setHtml(self.html)
 
         self.setCentralWidget(view)
-        self.resize(300, 400)
+        self.resize(450, 550)
         self.setWindowTitle('Help')
 
 
