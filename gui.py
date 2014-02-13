@@ -63,7 +63,6 @@ class MainWindow(QtGui.QWidget):
         self.puzzle.reset(str(self.puzzleIn.text()))
 
     def help(self):
-        print('help')
         self.win = help_.Win('help.md', 'help.css')
         self.win.show()
 
