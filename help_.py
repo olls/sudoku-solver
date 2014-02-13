@@ -47,7 +47,7 @@ class Win(QtGui.QMainWindow):
 
 def main():
     app = QtGui.QApplication(sys.argv)
-    win = Win('help.txt', 'help.css')
+    win = Win('help.md', 'help.css')
     win.show()
     sys.exit(app.exec_())
 
