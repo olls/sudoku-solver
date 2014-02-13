@@ -4,6 +4,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 
 import solver
+import help_
 
 
 class MainWindow(QtGui.QWidget):
@@ -20,17 +21,24 @@ class MainWindow(QtGui.QWidget):
         vbox = QtGui.QVBoxLayout()
 
         hbox = QtGui.QHBoxLayout()
-        self.puzzleIn = QtGui.QLineEdit()
-        hbox.addWidget(self.puzzleIn)
-        loadBtn = QtGui.QPushButton('Load')
-        loadBtn.clicked.connect(self.reset)
-        hbox.addWidget(loadBtn)
-        vbox.addLayout(hbox)
-
-        hbox = QtGui.QHBoxLayout()
         randBtn = QtGui.QPushButton('Random')
         randBtn.clicked.connect(lambda: self.reset(rand=True))
         hbox.addWidget(randBtn)
+        vbox.addLayout(hbox)
+
+        hbox = QtGui.QHBoxLayout()
+        self.puzzleIn = QtGui.QLineEdit()
+        hbox.addWidget(self.puzzleIn)
+        vbox.addLayout(hbox)
+        
+        hbox = QtGui.QHBoxLayout()
+        loadBtn = QtGui.QPushButton('Load')
+        loadBtn.clicked.connect(self.reset)
+        hbox.addWidget(loadBtn)
+
+        helpBtn = QtGui.QPushButton('Help')
+        helpBtn.clicked.connect(self.help)
+        hbox.addWidget(helpBtn)
         vbox.addLayout(hbox)
 
         hbox = QtGui.QHBoxLayout()
@@ -53,6 +61,11 @@ class MainWindow(QtGui.QWidget):
             self.puzzleIn.setText(solver.randPuzzle())
 
         self.puzzle.reset(str(self.puzzleIn.text()))
+
+    def help(self):
+        print('help')
+        self.win = help_.Win('help.txt', 'help.css')
+        self.win.show()
 
 
 class Puzzle(QtGui.QWidget):
