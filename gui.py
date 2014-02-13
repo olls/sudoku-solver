@@ -32,13 +32,13 @@ class MainWindow(QtGui.QWidget):
         vbox.addLayout(hbox)
         
         hbox = QtGui.QHBoxLayout()
-        loadBtn = QtGui.QPushButton('Load')
-        loadBtn.clicked.connect(self.reset)
-        hbox.addWidget(loadBtn)
-
         helpBtn = QtGui.QPushButton('Help')
         helpBtn.clicked.connect(self.help)
         hbox.addWidget(helpBtn)
+
+        loadBtn = QtGui.QPushButton('Load')
+        loadBtn.clicked.connect(self.reset)
+        hbox.addWidget(loadBtn)
         vbox.addLayout(hbox)
 
         hbox = QtGui.QHBoxLayout()
