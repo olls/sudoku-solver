@@ -25,10 +25,17 @@ to load the puzzle in to the program. If nothing happens it is either
 because the puzzle is broken or it is the same as the one already
 loaded.
 
+If you do not have a Sudoku to solve, you can just press the random
+button, which will load a random Sudoku into the grid from a long
+list.
+
 Solve
 -----
 
 To start the solving process, press the `Solve` button. If a message
 box opens saying: `Cannot solve puzzle.` It means the solver is not
 able to solve the puzzle, either because it is too difficult, or
-because it is a broken puzzle.
+because it is a broken puzzle. Once you press the solve button the
+solved cells in the Sudoku are filled in on the grid. If the solver
+was unable to solve the puzzle fully, it will display the cells it was
+able to solve.
