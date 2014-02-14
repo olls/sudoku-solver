@@ -7,7 +7,9 @@ Input
 -----
 
 To input a Sudoku in to the program, you can either type or paste it
-into the text box.
+into the text box. If you do not have a Sudoku to solve, you can just
+press the random button, which will load a random Sudoku into the grid
+from a long list.
 
 If you have the Sudoku in an `.sdm` file then you can just open the
 file in a text editor, and copy the line with the puzzle you want to
@@ -24,10 +26,6 @@ After you enter the Sudoku puzzle into the text box you press `load`
 to load the puzzle in to the program. If nothing happens it is either
 because the puzzle is broken or it is the same as the one already
 loaded.
-
-If you do not have a Sudoku to solve, you can just press the random
-button, which will load a random Sudoku into the grid from a long
-list.
 
 Solve
 -----
