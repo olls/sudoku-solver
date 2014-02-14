@@ -15,7 +15,7 @@ solve. Then open the Sudoku solver and paste it in to the text box.
 
 Otherwise if the file is an image, printed or in another format you
 will have to type it in to the text box manually. To do this just type
-in every letter in the puzzle left-to-right, top-to-bottom, using a
+in every number in the puzzle, left-to-right, top-to-bottom, using a
 `0` or `.` for a blank cell. The text should be 81 characters long, do
 not put any other characters in the puzzle to indicate boxes or new
 lines, the program will work this out on its own.
