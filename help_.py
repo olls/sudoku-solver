@@ -7,17 +7,15 @@ import codecs
 
 class Win(QtGui.QMainWindow):
 
-    def __init__(self, html, style):
+    def __init__(self, text, style):
         super(Win, self).__init__()
-
-
-        input_file = codecs.open(html, mode="r", encoding="utf-8")
-        text = input_file.read()
-        html = markdown.markdown(text)
-        input_file.close()
 
         with open(style) as f:
             style = f.read()
+
+        with open(text) as f:
+            mrkDn = f.read()
+        html = markdown.markdown(mrkDn)
 
         self.html = (
             '<!DOCTYPE html>\n\n'
